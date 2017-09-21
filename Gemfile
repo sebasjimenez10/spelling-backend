@@ -34,6 +34,11 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.6', '>= 3.6.1'
   gem 'annotate', require: false
   gem 'factory_girl_rails', '~> 4.8'
+
+  # Debugging
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-nav'
 end
 
 group :development do
