@@ -39,6 +39,10 @@ group :development, :test do
   gem 'pry'
   gem 'pry-rails'
   gem 'pry-nav'
+
+  # Frontend Debugging
+  gem 'binding_of_caller'
+  gem 'better_errors'
 end
 
 group :development do

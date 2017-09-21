@@ -17,6 +17,7 @@ RSpec.describe 'Exercises API', type: :request do
       # Since the scrambled word calculation is random
       # we can't know what that value will be
       expect(json['scrambled'].size).to eq word.content.size
+      expect(json['scrambled'].class).to eq Array
     end
 
     context 'when already solved an exercise' do
