@@ -9,7 +9,7 @@ class WordService
     end
 
     def evaluate_exercise(word_id, answer)
-      word = Word.find(word_id)
+      word = Word.where(id: word_id).first
       word.evaluate_answer(answer) if word.present?
     end
   end

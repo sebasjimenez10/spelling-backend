@@ -26,9 +26,9 @@ class Word < ApplicationRecord
 
     message = if percentage <= 25.0
                 'Your answer was not that close'
-              elsif percentage > 25.0 && percentage < 50.0
+              elsif percentage > 25.0 && percentage <= 50.0
                 'Your answer was not so bad, but still far from correct'
-              elsif percentage >= 50.0 && percentage < 75.0
+              elsif percentage > 50.0 && percentage < 75.0
                 'Your were almost there!'
               elsif percentage >= 75.0 && percentage < 100.0
                 "You only missed #{calculate_wrong_letters(answer).length} letter(s)"

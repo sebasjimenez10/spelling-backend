@@ -97,5 +97,20 @@ RSpec.describe 'Exercises API', type: :request do
       expect(json['message']).to eq 'You only missed 2 letter(s)'
       expect(json['wrong_letters_indexes']).to eq [6, 7]
     end
+
+    it 'should not pass but indicate how many letters were missed' do
+      get evaluate_exercise_path, params: { word_id: @exercise['word_id'], answer: 'examlesp' }
+      expect(response.status).to eq 200
+
+      expect(json['correctness_percentage'].round(2)).to eq 50.00
+      expect(json['message']).to eq 'Your answer was not so bad, but still far from correct'
+      expect(json['wrong_letters_indexes']).to eq [4, 5, 6, 7]
+    end
+
+    it 'should return not_found when word_id is incorrect' do
+      get evaluate_exercise_path, params: { word_id: 'invalid_uuid', answer: 'examlesp' }
+      expect(response.status).to eq 404
+      expect(json['message']).to eq 'Incorrect Word ID'
+    end
   end
 end
