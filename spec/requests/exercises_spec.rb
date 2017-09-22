@@ -112,5 +112,17 @@ RSpec.describe 'Exercises API', type: :request do
       expect(response.status).to eq 404
       expect(json['message']).to eq 'Incorrect Word ID'
     end
+
+    it 'should require the answer parameter' do
+      get evaluate_exercise_path, params: { word_id: 'invalid_uuid' }
+      expect(response.status).to eq 422
+      expect(json['message']).to eq 'param is missing or the value is empty: answer'
+    end
+
+    it 'should require the word_id parameter' do
+      get evaluate_exercise_path
+      expect(response.status).to eq 422
+      expect(json['message']).to eq 'param is missing or the value is empty: word_id'
+    end
   end
 end

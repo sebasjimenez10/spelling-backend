@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+# Provides an interface to interact with the Word model
+# and associated logic
 class WordService
   class << self
-    def fetch_word(last_word_uuid = nil, solved_words = [])
+    def find_word(last_word_uuid = nil, solved_words = [])
       previous_words = [*solved_words, last_word_uuid].compact
       word = Word.next_word(previous_words)
       # This covers an edge case with the last word in the db not being solved

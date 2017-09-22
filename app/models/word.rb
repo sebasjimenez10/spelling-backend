@@ -9,6 +9,9 @@
 #  updated_at :datetime         not null
 #
 class Word < ApplicationRecord
+  # Find a word which is not included in the list of previous words if passed
+  # if there aren't previous words it will go ahead and sample any of all of the words
+  # in the dictionary
   def self.next_word(previous_words)
     if previous_words.present?
       where('id NOT IN (?)', previous_words).sample
@@ -17,10 +20,12 @@ class Word < ApplicationRecord
     end
   end
 
+  # Returns a scrambled representation of the word's content
   def scramble_content
     content.downcase.chars.shuffle
   end
 
+  # Evaluates an answer and gives feedback about the answer given
   def evaluate_answer(answer)
     percentage = similarity_percentage(answer).round(2)
 
