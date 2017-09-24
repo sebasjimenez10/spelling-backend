@@ -22,7 +22,9 @@ class Word < ApplicationRecord
 
   # Returns a scrambled representation of the word's content
   def scramble_content
-    content.downcase.chars.shuffle
+    shuffled = content.downcase.chars.shuffle
+    shuffled = content.downcase.chars.shuffle while shuffled.join == content
+    shuffled
   end
 
   # Evaluates an answer and gives feedback about the answer given
@@ -34,13 +36,12 @@ class Word < ApplicationRecord
               elsif percentage > 25.0 && percentage <= 50.0
                 'Your answer was not so bad, but still far from correct'
               elsif percentage > 50.0 && percentage < 75.0
-                'Your were almost there!'
+                'You were almost there!'
               elsif percentage >= 75.0 && percentage < 100.0
                 "You only missed #{calculate_wrong_letters(answer).length} letter(s)"
               elsif percentage == 100.0
-                'You got it right! Congrats!'
+                'You got it right, Congrats!'
               end
-
     {
       message: message,
       correctness_percentage: percentage,
