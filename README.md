@@ -1,3 +1,7 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/b04ca01050be879da5e4/maintainability)](https://codeclimate.com/github/sebasjimenez10/spelling-backend/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/b04ca01050be879da5e4/test_coverage)](https://codeclimate.com/github/sebasjimenez10/spelling-backend/test_coverage)
+[![Build Status](https://travis-ci.org/sebasjimenez10/spelling-backend.svg?branch=master)](https://travis-ci.org/sebasjimenez10/spelling-backend)
+
 # README
 
 ## Spelling Backend
