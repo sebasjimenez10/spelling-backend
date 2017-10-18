@@ -12,12 +12,13 @@ class Word < ApplicationRecord
   # Find a word which is not included in the list of previous words if passed
   # if there aren't previous words it will go ahead and sample any of all of the words
   # in the dictionary
-  def self.next_word(previous_words)
-    if previous_words.present?
-      where('id NOT IN (?)', previous_words).sample
-    else
-      all.sample
-    end
+  scope :unsolved_words, ->(solved_word_ids) { where('id NOT IN (?)', solved_word_ids) }
+
+  def self.next_word(last_word_id, solved_words)
+    words = unsolved_words(solved_words)
+    words = words.reject { |word| word.id == last_word_id } if words.size <= 1
+    words = all unless words.present?
+    words.sample
   end
 
   # Returns a scrambled representation of the word's content
@@ -29,27 +30,27 @@ class Word < ApplicationRecord
 
   # Evaluates an answer and gives feedback about the answer given
   def evaluate_answer(answer)
-    percentage = similarity_percentage(answer).round(2)
+    percentage            = similarity_percentage(answer).round(2)
+    wrong_letters_indexes = calculate_wrong_letters(answer)
+    message               = calculate_message(percentage, wrong_letters_indexes.size)
 
-    message = if percentage <= 25.0
-                'Your answer was not that close'
-              elsif percentage > 25.0 && percentage <= 50.0
-                'Your answer was not so bad, but still far from correct'
-              elsif percentage > 50.0 && percentage < 75.0
-                'You were almost there!'
-              elsif percentage >= 75.0 && percentage < 100.0
-                "You only missed #{calculate_wrong_letters(answer).length} letter(s)"
-              elsif percentage == 100.0
-                'You got it right, Congrats!'
-              end
-    {
-      message: message,
-      correctness_percentage: percentage,
-      wrong_letters_indexes: calculate_wrong_letters(answer)
-    }
+    ExerciseEvaluation.new(message: message, correctness_percentage: percentage, wrong_letters_indexes: wrong_letters_indexes)
   end
 
   private
+
+  def calculate_message(percentage, wrong_letters_count)
+    case percentage
+    when 0.0..49.9
+      'Your answer was not that close'
+    when 50.0..74.9
+      'You were almost there!'
+    when 75.0..98.9
+      "You only missed #{wrong_letters_count} letter(s)"
+    when 99.0..100.0
+      'You got it right, Congrats!'
+    end
+  end
 
   def calculate_wrong_letters(answer)
     answer_chars = answer.chars

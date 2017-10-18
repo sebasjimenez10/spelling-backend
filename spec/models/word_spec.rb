@@ -33,8 +33,7 @@ RSpec.describe Word, type: :model do
     let!(:word_three) { create(:word, content: 'before') }
 
     it 'should return the next word when no previous info is passed' do
-      previous_words = [word_one.id]
-      expect([word_two, word_three]).to include Word.next_word(previous_words)
+      expect([word_one, word_two, word_three]).to include Word.next_word(nil, [])
     end
   end
 end

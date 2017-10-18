@@ -3,17 +3,14 @@
 # and associated logic
 class WordService
   class << self
-    def find_word(last_word_uuid = nil, solved_words = [])
-      previous_words = [*solved_words, last_word_uuid].compact
-      word = Word.next_word(previous_words)
-      # This covers an edge case with the last word in the db not being solved
-      word = Word.next_word([*solved_words]) unless word.present?
-      word
+    def next_word(last_word_uuid = nil, solved_words = [])
+      Word.next_word(last_word_uuid, solved_words)
     end
 
     def evaluate_exercise(word_id, answer)
-      word = Word.where(id: word_id).first
-      word.evaluate_answer(answer) if word.present?
+      # Raises exception if record not found
+      word = Word.find(word_id)
+      word.evaluate_answer(answer)
     end
   end
 end
